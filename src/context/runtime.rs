@@ -1,5 +1,6 @@
 use crate::context::globals::{init_globals, JOBS};
 use anyhow::Result;
+use colored::Colorize;
 use mlua::Lua;
 
 use super::widgets::text;
@@ -19,16 +20,18 @@ pub fn run() -> Result<()> {
 
     lua.load(
         r#"
-        function widget
+        function widget()
             text("hello 2")
         end
+
+        widget()
     "#,
     )
     .exec()?;
 
-    let jobs = JOBS.get().expect("Error: cannot open jobs").lock().unwrap();
+    println!("[{}] Lua loaded correctly", "OUTPUT".yellow());
 
-    println!("{:?}", jobs);
+    let jobs = JOBS.get().expect("Error: cannot open jobs").lock().unwrap();
 
     Ok(())
 }

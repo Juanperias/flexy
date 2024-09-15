@@ -1,5 +1,6 @@
 mod cli;
 mod commands;
+mod compositor;
 mod config;
 mod context;
 mod models;
