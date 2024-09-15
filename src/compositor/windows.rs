@@ -53,7 +53,7 @@ pub fn render_window(screen: &Screen) -> Result<()> {
                         accum
                     }
                 })
-                .unwrap()
+                .expect("Error: unable to find a suitable configuration")
         })
         .expect("Error: the screen cannot be built");
 
