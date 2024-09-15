@@ -1,11 +1,11 @@
-use crate::context::globals::{init_globals, JOBS};
+use crate::context::globals::init_globals;
 use anyhow::Result;
 use colored::Colorize;
 use mlua::Lua;
 
 use super::widgets::text;
 
-pub fn run() -> Result<()> {
+pub fn run(widgets: Vec<String>) -> Result<()> {
     init_globals();
 
     let lua = Lua::new();
@@ -18,16 +18,13 @@ pub fn run() -> Result<()> {
     let globals = lua.globals();
     globals.set("text", ui_text)?;
 
-    lua.load(
-        r#"
-        function widget()
-            text("hello 2")
-        end
+    widgets.iter().try_for_each(|widget| {
+        lua.load(widget).exec()?;
 
-        widget()
-    "#,
-    )
-    .exec()?;
+        let widget: mlua::Function = lua.globals().get("widget")?;
+
+        widget.call(())
+    })?;
 
     println!("[{}] Lua loaded correctly", "OUTPUT".yellow());
 

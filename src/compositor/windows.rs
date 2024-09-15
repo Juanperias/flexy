@@ -23,7 +23,7 @@ use crate::{
     },
 };
 
-pub fn render_window(screen: Screen) -> Result<()> {
+pub fn render_window(screen: &Screen) -> Result<()> {
     let event_loop = EventLoop::new()?;
 
     let window_attributes = WindowAttributes::default()

@@ -7,8 +7,8 @@ pub struct CompositorConfig {
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Screen {
-    pub widgets: Vec<String>,
     pub name: String,
+    pub widgets: Vec<String>,
     pub blur: bool,
     pub size_x: i32,
     pub size_y: i32,
