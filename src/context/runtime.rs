@@ -31,7 +31,5 @@ pub fn run() -> Result<()> {
 
     println!("[{}] Lua loaded correctly", "OUTPUT".yellow());
 
-    let jobs = JOBS.get().expect("Error: cannot open jobs").lock().unwrap();
-
     Ok(())
 }

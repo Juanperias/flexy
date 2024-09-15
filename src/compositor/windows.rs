@@ -17,17 +17,22 @@ use winit::{dpi::LogicalSize, event::Modifiers, event_loop::EventLoop, window::W
 
 use crate::{
     compositor::surface::create_surface,
-    models::skia_env::{SkiaApplication, SkiaEnv},
+    models::{
+        compositor_config::Screen,
+        skia_env::{SkiaApplication, SkiaEnv},
+    },
 };
 
-pub fn render_window() -> Result<()> {
+pub fn render_window(screen: Screen) -> Result<()> {
     let event_loop = EventLoop::new()?;
 
     let window_attributes = WindowAttributes::default()
         .with_title("Flexy widget")
-        .with_inner_size(LogicalSize::new(100, 100))
-        .with_max_inner_size(LogicalSize::new(100, 100))
-        .with_min_inner_size(LogicalSize::new(100, 100));
+        .with_decorations(false)
+        .with_blur(screen.blur)
+        .with_inner_size(LogicalSize::new(screen.size_x, screen.size_y))
+        .with_max_inner_size(LogicalSize::new(screen.size_x, screen.size_y))
+        .with_min_inner_size(LogicalSize::new(screen.size_x, screen.size_y));
 
     let template = ConfigTemplateBuilder::new()
         .with_alpha_size(8)

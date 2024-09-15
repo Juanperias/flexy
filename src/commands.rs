@@ -17,7 +17,7 @@ impl Commands {
                 channel::get_channel();
             }
             Self::Start { screen } => {
-                start::start_widget()?;
+                start::start_widget(screen.to_owned())?;
             }
         }
 

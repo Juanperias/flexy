@@ -19,6 +19,7 @@ pub struct SkiaEnv {
     pub window: Window,
 }
 
+#[allow(dead_code)]
 pub struct SkiaApplication {
     pub env: SkiaEnv,
     pub fb_info: FramebufferInfo,
@@ -30,12 +31,12 @@ pub struct SkiaApplication {
 }
 
 impl ApplicationHandler for SkiaApplication {
-    fn resumed(&mut self, event_loop: &winit::event_loop::ActiveEventLoop) {
+    fn resumed(&mut self, _event_loop: &winit::event_loop::ActiveEventLoop) {
         println!("[{}] application resumed", "DEBUG".blue());
     }
     fn new_events(
         &mut self,
-        event_loop: &winit::event_loop::ActiveEventLoop,
+        _event_loop: &winit::event_loop::ActiveEventLoop,
         cause: winit::event::StartCause,
     ) {
         if let winit::event::StartCause::ResumeTimeReached { .. } = cause {
@@ -45,7 +46,7 @@ impl ApplicationHandler for SkiaApplication {
     fn window_event(
         &mut self,
         event_loop: &winit::event_loop::ActiveEventLoop,
-        window_id: winit::window::WindowId,
+        _window_id: winit::window::WindowId,
         event: winit::event::WindowEvent,
     ) {
         let mut draw_frame = false;
