@@ -1,5 +1,5 @@
 use crate::{
-    compositor::windows::render_window,
+    compositor::window::render_window,
     context::runtime::run,
     models::compositor_config::Screen,
     utils::{get_compositor_config::compositor_config, get_lua::get_lua_from_screen},
