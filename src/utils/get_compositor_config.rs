@@ -16,9 +16,9 @@ pub fn compositor_config() -> Result<CompositorConfig> {
 
         Ok(parsed)
     } else {
-        return Err(anyhow!(format!(
+        Err(anyhow!(format!(
             "A configuration file was not found in {:?}",
             config_path
-        )));
+        )))
     }
 }

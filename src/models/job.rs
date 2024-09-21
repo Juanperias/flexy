@@ -1,10 +1,10 @@
 #[derive(Debug)]
-pub enum JobKind {
+pub enum Kind {
     Text,
 }
 
 #[derive(Debug)]
 pub struct Job {
-    pub kind: JobKind,
+    pub kind: Kind,
     pub value: String,
 }

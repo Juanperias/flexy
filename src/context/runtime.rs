@@ -1,5 +1,5 @@
 use crate::context::{
-    globals::init_globals,
+    globals::init,
     lua_out::{lua_debug, lua_error},
 };
 use anyhow::Result;
@@ -9,7 +9,7 @@ use mlua::Lua;
 use super::widgets::text;
 
 pub fn run(widgets: Vec<String>) -> Result<()> {
-    init_globals();
+    init();
 
     let lua = Lua::new();
 

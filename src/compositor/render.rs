@@ -1,6 +1,6 @@
 use nannou::prelude::*;
 
-use crate::{context::globals::JOBS, models::job::JobKind};
+use crate::{context::globals::JOBS, models::job::Kind};
 
 pub fn render_jobs(app: &App, _model: &(), frame: Frame) {
     let jobs_guard = JOBS
@@ -17,7 +17,7 @@ pub fn render_jobs(app: &App, _model: &(), frame: Frame) {
         let win_rect = app.main_window().rect().pad(20.0);
 
         match job.kind {
-            JobKind::Text => {
+            Kind::Text => {
                 draw.text(&job.value)
                     .color(BLACK)
                     .font_size(20)

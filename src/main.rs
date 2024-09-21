@@ -7,10 +7,10 @@ mod models;
 mod utils;
 
 use anyhow::Result;
-use cli::get_cli;
+use cli::get;
 
 fn main() -> Result<()> {
-    let cli = get_cli();
+    let cli = get();
 
     cli.commands.run()?;
 

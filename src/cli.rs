@@ -14,7 +14,7 @@ pub struct Cli {
     verbose: Verbosity,
 }
 
-pub fn get_cli() -> Cli {
+pub fn get() -> Cli {
     let cli = Cli::parse();
     let log_filter = cli.verbose.log_level_filter();
 
