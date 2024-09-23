@@ -16,7 +16,6 @@ pub fn run(widgets: Vec<String>) -> Result<()> {
     let ui_text = lua.create_function(|_, (param, table): (String, Option<Table>)| {
         if let Some(stable) = &table {
             let hola: String = stable.get("color")?;
-            println!("{}", hola);
         }
         text(param, table);
         Ok(())
