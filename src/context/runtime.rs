@@ -4,7 +4,7 @@ use crate::context::{
 };
 use anyhow::Result;
 use colored::Colorize;
-use mlua::Lua;
+use mlua::{Lua, Table};
 
 use super::widgets::text;
 
@@ -13,8 +13,12 @@ pub fn run(widgets: Vec<String>) -> Result<()> {
 
     let lua = Lua::new();
 
-    let ui_text = lua.create_function(|_, param: String| {
-        text(param);
+    let ui_text = lua.create_function(|_, (param, table): (String, Option<Table>)| {
+        if let Some(stable) = &table {
+            let hola: String = stable.get("color")?;
+            println!("{}", hola);
+        }
+        text(param, table);
         Ok(())
     })?;
 

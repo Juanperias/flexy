@@ -1,3 +1,5 @@
+use crate::models::styles::Style;
+
 #[derive(Debug)]
 pub enum Kind {
     Text,
@@ -7,4 +9,5 @@ pub enum Kind {
 pub struct Job {
     pub kind: Kind,
     pub value: String,
+    pub style: Style,
 }

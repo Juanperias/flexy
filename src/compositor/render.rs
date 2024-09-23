@@ -19,8 +19,9 @@ pub fn render_jobs(app: &App, _model: &(), frame: Frame) {
         match job.kind {
             Kind::Text => {
                 draw.text(&job.value)
-                    .color(BLACK)
-                    .font_size(20)
+                    .color(job.style.color)
+                    .font_size(job.style.font_size)
+                    .x_y_z(job.style.pos_x, job.style.pos_y, 0.0)
                     .wh(win_rect.wh());
             }
         }
