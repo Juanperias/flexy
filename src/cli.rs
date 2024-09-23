@@ -5,7 +5,7 @@ use crate::commands::Commands;
 
 #[derive(Parser)]
 #[command(name = "flexy")]
-#[command(about = "An extremely fast widget composer written in rust with skia", long_about = None)]
+#[command(about = "An extremely fast widget composer written in rust with nannou", long_about = None)]
 pub struct Cli {
     #[clap(subcommand)]
     pub commands: Commands,
