@@ -1,8 +1,6 @@
-use crate::models::compositor_config::Screen;
+use crate::{compositor::render::render_jobs, models::compositor_config::Screen};
 use nannou::prelude::*;
 use std::sync::{Mutex, OnceLock};
-
-use super::render::render_jobs;
 
 pub static SCREEN_STATE: OnceLock<Mutex<Screen>> = OnceLock::new();
 
@@ -17,14 +15,15 @@ pub fn render(screen: &Screen) {
     nannou::app(model).run();
 }
 
-pub fn model(app: &App) {
+pub fn model(app: &App) -> Screen {
     let screen_static = SCREEN_STATE
         .get()
         .expect("Screen not initialized")
         .lock()
-        .expect("Failed to lock the mutex");
+        .expect("Failed to lock the mutex")
+        .clone();
 
-    let mut window_builder = app.new_window().view(render_jobs);
+    let mut window_builder = app.new_window().view(view);
 
     if let (Some(size_x), Some(size_y)) = (screen_static.size_x, screen_static.size_y) {
         window_builder = window_builder
@@ -36,4 +35,10 @@ pub fn model(app: &App) {
     let _window_id = window_builder
         .build()
         .expect("Error: cannot build the window");
+
+    screen_static
+}
+
+pub fn view(app: &App, model: &Screen, frame: Frame) {
+    render_jobs(app, model, frame);
 }

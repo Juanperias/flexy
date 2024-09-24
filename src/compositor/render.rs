@@ -1,8 +1,11 @@
 use nannou::prelude::*;
 
-use crate::{context::globals::JOBS, models::job::Kind};
+use crate::{
+    context::globals::JOBS,
+    models::{compositor_config::Screen, job::Kind, styles::ToColor},
+};
 
-pub fn render_jobs(app: &App, _model: &(), frame: Frame) {
+pub fn render_jobs(app: &App, model: &Screen, frame: Frame) {
     let jobs_guard = JOBS
         .get()
         .expect("Error: cannot get the jobs")
@@ -11,7 +14,9 @@ pub fn render_jobs(app: &App, _model: &(), frame: Frame) {
     let jobs = &*jobs_guard;
 
     let draw = app.draw();
-    draw.background().color(WHITE);
+    let color = model.bg_color.clone().unwrap_or("ffffff".to_string());
+    let rgb_color = color.to_color().unwrap_or(WHITE.into_format());
+    draw.background().color(rgb_color);
 
     for job in jobs {
         let win_rect = app.main_window().rect().pad(20.0);
