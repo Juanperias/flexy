@@ -18,7 +18,7 @@ pub fn widget(screen_name: String) -> Result<()> {
     let screen = find_screen(&config.screens, &screen_name)?;
     let lua_code = from_screen(screen)?;
 
-    run(lua_code)?;
+    run(lua_code.as_slice())?;
 
     render(screen);
 
