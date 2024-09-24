@@ -1,5 +1,4 @@
 use crate::models::compositor_config::Screen;
-use anyhow::Result;
 use nannou::prelude::*;
 use std::sync::{Mutex, OnceLock};
 
@@ -13,11 +12,9 @@ pub fn remember_screen(screen: Screen) {
         .expect("Error: Mutex cannot be initialized");
 }
 
-pub fn render_window(screen: &Screen) -> Result<()> {
+pub fn render(screen: &Screen) {
     remember_screen(screen.to_owned());
     nannou::app(model).run();
-
-    Ok(())
 }
 
 pub fn model(app: &App) {

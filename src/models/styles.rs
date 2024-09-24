@@ -11,9 +11,9 @@ impl ToColor for String {
         if self.len() != 6 {
             return Err(anyhow!("Error: invalid color format"));
         }
-        let red = u8::from_str_radix(&self[0..2], 16)? as f32 / 255.0;
-        let green = u8::from_str_radix(&self[2..4], 16)? as f32 / 255.0;
-        let blue = u8::from_str_radix(&self[4..6], 16)? as f32 / 255.0;
+        let red = f32::from(u8::from_str_radix(&self[0..2], 16)?) / 255.0;
+        let green = f32::from(u8::from_str_radix(&self[2..4], 16)?) / 255.0;
+        let blue = f32::from(u8::from_str_radix(&self[4..6], 16)?) / 255.0;
 
         Ok(Srgb::new(red, green, blue))
     }

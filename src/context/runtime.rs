@@ -8,7 +8,7 @@ use mlua::{Lua, Table};
 
 use super::widgets::text;
 
-pub fn run(widgets: Vec<String>) -> Result<()> {
+pub fn run(widgets: &[String]) -> Result<()> {
     init();
 
     let lua = Lua::new();

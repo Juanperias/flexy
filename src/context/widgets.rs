@@ -20,6 +20,6 @@ pub fn text(value: String, table: Option<Table>) {
             kind: Kind::Text,
             value,
             style: Style::new(),
-        })
+        });
     }
 }

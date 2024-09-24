@@ -14,10 +14,10 @@ impl Commands {
     pub fn run(&self) -> Result<()> {
         match self {
             Self::Channel {} => {
-                channel::get_channel();
+                channel::get();
             }
             Self::Start { screen } => {
-                start::start_widget(screen.to_owned())?;
+                start::widget(screen.to_owned())?;
             }
         }
 
