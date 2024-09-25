@@ -1,6 +1,5 @@
 use crate::{compositor::render::render_jobs, models::compositor_config::Screen};
 use nannou::prelude::*;
-use nannou::text::Font;
 use std::sync::{Mutex, OnceLock};
 
 pub static SCREEN_STATE: OnceLock<Mutex<Screen>> = OnceLock::new();
@@ -14,11 +13,6 @@ pub fn remember_screen(screen: Screen) {
 pub fn render(screen: &Screen) {
     remember_screen(screen.to_owned());
     nannou::app(model).run();
-}
-
-struct Model {
-    font: Font,
-    screen: Screen,
 }
 
 pub fn model(app: &App) -> Screen {
