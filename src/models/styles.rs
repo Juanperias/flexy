@@ -1,6 +1,9 @@
 use anyhow::{anyhow, Result};
 use mlua::Table;
 use nannou::color::{Rgb, Srgb, BLACK};
+use nannou::text::Font;
+
+use crate::utils::font_util;
 
 pub trait ToColor {
     fn to_color(&self) -> Result<Rgb>;
@@ -25,6 +28,7 @@ pub struct Style {
     pub font_size: u32,
     pub pos_x: f32,
     pub pos_y: f32,
+    pub font: Option<Font>,
 }
 
 impl Style {
@@ -34,6 +38,7 @@ impl Style {
             font_size: 10,
             pos_x: 0.0,
             pos_y: 0.0,
+            font: None,
         }
     }
     pub fn from_table(table: Table) -> Result<Self> {
@@ -43,12 +48,19 @@ impl Style {
         let font_size: u32 = table.get("font_size").unwrap_or(10);
         let pos_x: f32 = table.get("pos_x").unwrap_or(0.0);
         let pos_y: f32 = table.get("pos_y").unwrap_or(0.0);
+        let font_name: Option<String> = table.get("font").unwrap_or(None);
+
+        let mut font = None;
+        if let Some(safe_font_name) = font_name {
+            font = font_util::get(safe_font_name)?;
+        }
 
         Ok(Style {
             color: color_rgb,
             font_size,
             pos_x,
             pos_y,
+            font,
         })
     }
 }
