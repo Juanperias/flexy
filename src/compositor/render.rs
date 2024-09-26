@@ -3,6 +3,7 @@ use nannou::prelude::*;
 use crate::{
     context::globals::JOBS,
     models::{compositor_config::Screen, job::Kind, styles::ToColor},
+    widgets::text,
 };
 
 pub fn render_jobs(app: &App, model: &Screen, frame: Frame) {
@@ -23,20 +24,7 @@ pub fn render_jobs(app: &App, model: &Screen, frame: Frame) {
 
         match job.kind {
             Kind::Text => {
-                if let Some(font) = &job.style.font {
-                    draw.text(&job.value)
-                        .font(font.to_owned())
-                        .color(job.style.color)
-                        .font_size(job.style.font_size)
-                        .x_y_z(job.style.pos_x, job.style.pos_y, 0.0)
-                        .wh(win_rect.wh());
-                } else {
-                    draw.text(&job.value)
-                        .color(job.style.color)
-                        .font_size(job.style.font_size)
-                        .x_y_z(job.style.pos_x, job.style.pos_y, 0.0)
-                        .wh(win_rect.wh());
-                }
+                text::render(&draw, win_rect, job);
             }
         }
     }

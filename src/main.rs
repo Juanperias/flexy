@@ -5,6 +5,7 @@ mod config;
 mod context;
 mod models;
 mod utils;
+mod widgets;
 
 use anyhow::Result;
 use cli::get;
