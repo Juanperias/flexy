@@ -28,7 +28,7 @@
     {
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs;
-          [ libxkbcommon ] ++ buildInputs;
+          [ libxkbcommon pkg-config ] ++ buildInputs;
         LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath buildInputs}";
         PKG_CONFIG_PATH = "${pkgs.fontconfig.dev}/lib/pkgconfig:${pkgs.lua5_4}/lib/pkgconfig:${pkgs.lib.makeLibraryPath buildInputs}";
       };
