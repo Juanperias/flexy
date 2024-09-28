@@ -2,7 +2,7 @@ extern crate sdl2;
 
 use crate::models::{compositor_config::Screen, styles::ToColor};
 use colored::Colorize;
-use sdl2::event::Event;
+use sdl2::event::{Event, WindowEvent};
 use std::env;
 use std::time::Duration;
 
@@ -46,6 +46,13 @@ pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
                         println!("[{}] cannot close this window", "ERROR".red())
                     }
                 }
+                Event::Window {
+                    timestamp,
+                    window_id,
+                    win_event,
+                } => match win_event {
+                    _ => {}
+                },
                 _ => {}
             }
         }

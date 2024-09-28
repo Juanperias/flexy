@@ -5,6 +5,11 @@ use crate::{
 };
 use mlua::Table;
 
+pub fn clear() {
+    let mut jobs = JOBS.get().expect("Error: cannot open jobs").lock().unwrap();
+    *jobs = Vec::new();
+}
+
 pub fn text(value: String, table: Option<Table>) {
     let mut jobs = JOBS.get().expect("Error: cannot open jobs").lock().unwrap();
     if let Some(safe_table) = table {

@@ -1,6 +1,7 @@
 use crate::context::{
     globals::init,
     lua_out::{lua_debug, lua_error},
+    widgets::clear,
 };
 use anyhow::Result;
 use colored::Colorize;
@@ -18,6 +19,11 @@ pub fn run(widgets: &[String]) -> Result<()> {
         Ok(())
     })?;
 
+    let ui_clear = lua.create_function(|_, ()| {
+        clear();
+        Ok(())
+    })?;
+
     let out_debug = lua.create_function(|_, message: String| {
         lua_debug(message);
         Ok(())
@@ -32,6 +38,7 @@ pub fn run(widgets: &[String]) -> Result<()> {
     globals.set("text", ui_text)?;
     globals.set("debug", out_debug)?;
     globals.set("error", out_error)?;
+    globals.set("clear", ui_clear)?;
 
     widgets.iter().try_for_each(|widget| {
         lua.load(widget).exec()?;
