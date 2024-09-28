@@ -7,7 +7,11 @@ mod start;
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     Channel {},
-    Start { screen: String },
+    Start {
+        screen: String,
+        #[clap(short, long)]
+        can_close: bool,
+    },
 }
 
 impl Commands {
@@ -16,8 +20,8 @@ impl Commands {
             Self::Channel {} => {
                 channel::get();
             }
-            Self::Start { screen } => {
-                start::widget(screen.to_owned())?;
+            Self::Start { screen, can_close } => {
+                start::widget(screen.to_owned(), can_close.to_owned())?;
             }
         }
 

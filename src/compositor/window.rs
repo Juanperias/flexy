@@ -8,7 +8,7 @@ use std::time::Duration;
 
 use super::render::render_jobs;
 
-pub fn render(screen: &Screen) -> Result<(), String> {
+pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
     if env::var("WAYLAND_DISPLAY").is_ok() {
         env::set_var("SDL_VIDEODRIVER", "wayland");
         println!("[{}] video driver set to wayland", "DEBUG".blue());
@@ -39,7 +39,13 @@ pub fn render(screen: &Screen) -> Result<(), String> {
     'main: loop {
         for event in event_pump.poll_iter() {
             match event {
-                Event::Quit { .. } => break 'main,
+                Event::Quit { .. } => {
+                    if can_close {
+                        break 'main;
+                    } else {
+                        println!("[{}] cannot close this window", "ERROR".red())
+                    }
+                }
                 _ => {}
             }
         }
