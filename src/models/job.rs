@@ -1,6 +1,6 @@
 use crate::models::styles::Style;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Kind {
     Text,
 }

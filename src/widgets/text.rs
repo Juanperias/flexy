@@ -1,16 +1,24 @@
-use nannou::prelude::*;
+use sdl2::{
+    render::{Texture, TextureCreator},
+    surface::Surface,
+    ttf::Sdl2TtfContext,
+    video::WindowContext,
+};
 
 use crate::models::job::Job;
 
-pub fn render(draw: &Draw, win_rect: Rect, job: &Job) {
-    let text = draw
-        .text(&job.value)
-        .color(job.style.color)
-        .font_size(job.style.font_size)
-        .x_y_z(job.style.pos_x, job.style.pos_y, 0.0)
-        .wh(win_rect.wh());
-
-    if let Some(font) = &job.style.font {
-        text.font(font.to_owned());
-    }
+pub fn render<'a>(
+    ttf: &Sdl2TtfContext,
+    job: &Job,
+    texture_creature: &'a TextureCreator<WindowContext>,
+) -> Result<(Texture<'a>, Surface<'a>), String> {
+    let font = ttf.load_font(&job.style.font, job.style.font_size)?;
+    let surface = font
+        .render(&job.value)
+        .blended(job.style.color)
+        .map_err(|err| err.to_string())?;
+    let texture = texture_creature
+        .create_texture_from_surface(&surface)
+        .map_err(|err| err.to_string())?;
+    Ok((texture, surface))
 }

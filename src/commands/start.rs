@@ -10,7 +10,7 @@ fn find_screen<'a>(screens: &'a [Screen], name: &str) -> Result<&'a Screen> {
     screens
         .iter()
         .find(|screen| screen.name == name)
-        .ok_or_else(|| anyhow!("Error: screen not found"))
+        .ok_or_else(|| anyhow!("screen not found"))
 }
 
 pub fn widget(screen_name: String) -> Result<()> {
@@ -20,7 +20,7 @@ pub fn widget(screen_name: String) -> Result<()> {
 
     run(lua_code.as_slice())?;
 
-    render(screen);
+    render(screen).expect("Error: cannot render the windows");
 
     Ok(())
 }

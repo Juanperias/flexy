@@ -1,33 +1,33 @@
-use nannou::prelude::*;
+use sdl2::{rect::Rect, render::Canvas, ttf::Sdl2TtfContext, video::Window};
 
-use crate::{
-    context::globals::JOBS,
-    models::{compositor_config::Screen, job::Kind, styles::ToColor},
-    widgets::text,
-};
+use crate::{context::globals::JOBS, models::job::Kind, widgets::text};
 
-pub fn render_jobs(app: &App, model: &Screen, frame: Frame) {
+pub fn render_jobs(canvas: &mut Canvas<Window>, ttf: &Sdl2TtfContext) -> Result<(), String> {
     let jobs_guard = JOBS
         .get()
         .expect("Error: cannot get the jobs")
         .lock()
         .expect("Error: cannot lock the jobs");
     let jobs = &*jobs_guard;
-
-    let draw = app.draw();
-    let color = model.bg_color.clone().unwrap_or("ffffff".to_string());
-    let rgb_color = color.to_color().unwrap_or(WHITE.into_format());
-    draw.background().color(rgb_color);
+    let texture_creature = canvas.texture_creator();
 
     for job in jobs {
-        let win_rect = app.main_window().rect().pad(20.0);
-
-        match job.kind {
+        match &job.kind {
             Kind::Text => {
-                text::render(&draw, win_rect, job);
+                let (texture, surface) = text::render(&ttf, job, &texture_creature)?;
+                canvas.copy(
+                    &texture,
+                    None,
+                    Some(Rect::new(
+                        job.style.pos_x,
+                        job.style.pos_y,
+                        surface.width(),
+                        surface.height(),
+                    )),
+                )?;
             }
         }
     }
 
-    draw.to_frame(app, &frame).unwrap();
+    Ok(())
 }

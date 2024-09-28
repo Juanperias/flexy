@@ -1,44 +1,55 @@
-use crate::{compositor::render::render_jobs, models::compositor_config::Screen};
-use nannou::prelude::*;
-use std::sync::{Mutex, OnceLock};
+extern crate sdl2;
 
-pub static SCREEN_STATE: OnceLock<Mutex<Screen>> = OnceLock::new();
+use std::time::Duration;
 
-pub fn remember_screen(screen: Screen) {
-    SCREEN_STATE
-        .set(Mutex::new(screen))
-        .expect("Error: Mutex cannot be initialized");
-}
+use crate::models::{compositor_config::Screen, styles::ToColor};
+use sdl2::event::Event;
 
-pub fn render(screen: &Screen) {
-    remember_screen(screen.to_owned());
-    nannou::app(model).run();
-}
+use super::render::render_jobs;
 
-pub fn model(app: &App) -> Screen {
-    let screen_static = SCREEN_STATE
-        .get()
-        .expect("Screen not initialized")
-        .lock()
-        .expect("Failed to lock the mutex")
-        .clone();
+pub fn render(screen: &Screen) -> Result<(), String> {
+    let sdl_context = sdl2::init()?;
+    let video_subsystem = sdl_context.video()?;
+    let ttf_context = sdl2::ttf::init().map_err(|err| err.to_string())?;
 
-    let mut window_builder = app.new_window().view(view);
+    let window = video_subsystem
+        .window(
+            &screen.name,
+            screen.size_x.unwrap_or(800),
+            screen.size_y.unwrap_or(600),
+        )
+        .always_on_top()
+        .borderless()
+        .build()
+        .map_err(|err| err.to_string())?;
 
-    if let (Some(size_x), Some(size_y)) = (screen_static.size_x, screen_static.size_y) {
-        window_builder = window_builder
-            .size(size_x, size_y)
-            .max_size(size_x, size_y)
-            .min_size(size_x, size_y);
+    let mut canvas = window
+        .into_canvas()
+        .build()
+        .map_err(|err| err.to_string())?;
+
+    let mut event_pump = sdl_context.event_pump()?;
+    'main: loop {
+        for event in event_pump.poll_iter() {
+            match event {
+                Event::Quit { .. } => break 'main,
+                _ => {}
+            }
+        }
+
+        if let Some(bg_color) = &screen.bg_color {
+            let color = bg_color.to_color().map_err(|err| err.to_string())?;
+            canvas.set_draw_color(color);
+        } else {
+            canvas.set_draw_color(sdl2::pixels::Color::RGB(255, 255, 255));
+        }
+
+        canvas.clear();
+        render_jobs(&mut canvas, &ttf_context)?;
+        canvas.present();
+
+        std::thread::sleep(Duration::from_millis(100));
     }
 
-    let _window_id = window_builder
-        .build()
-        .expect("Error: cannot build the window");
-
-    screen_static
-}
-
-pub fn view(app: &App, model: &Screen, frame: Frame) {
-    render_jobs(app, model, frame);
+    Ok(())
 }
