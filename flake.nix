@@ -14,13 +14,9 @@
         fontconfig
         libxkbcommon.dev
         wayland
+        wayland.dev
         libxkbcommon
-        xorg.libxcb
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXrandr
         xdg-desktop-portal
-        xorg.libXi
         lua5_4
         dbus
         libGL

@@ -12,4 +12,5 @@ pub struct Screen {
     pub size_x: Option<u32>,
     pub size_y: Option<u32>,
     pub bg_color: Option<String>,
+    pub can_close: Option<bool>,
 }

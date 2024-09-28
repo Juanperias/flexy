@@ -1,13 +1,19 @@
 extern crate sdl2;
 
-use std::time::Duration;
-
 use crate::models::{compositor_config::Screen, styles::ToColor};
+use colored::Colorize;
 use sdl2::event::Event;
+use std::env;
+use std::time::Duration;
 
 use super::render::render_jobs;
 
 pub fn render(screen: &Screen) -> Result<(), String> {
+    if env::var("WAYLAND_DISPLAY").is_ok() {
+        env::set_var("SDL_VIDEODRIVER", "wayland");
+        println!("[{}] video driver set to wayland", "DEBUG".blue());
+    }
+
     let sdl_context = sdl2::init()?;
     let video_subsystem = sdl_context.video()?;
     let ttf_context = sdl2::ttf::init().map_err(|err| err.to_string())?;
@@ -25,6 +31,7 @@ pub fn render(screen: &Screen) -> Result<(), String> {
 
     let mut canvas = window
         .into_canvas()
+        .accelerated()
         .build()
         .map_err(|err| err.to_string())?;
 
