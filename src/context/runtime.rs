@@ -42,7 +42,7 @@ pub fn run(widget: String) -> Result<()> {
 
     lua.load(widget).exec()?;
 
-    let widget: mlua::Function = lua.globals().get("widget")?;
+    let widget: mlua::Function = lua.globals().get("Widget")?;
 
     widget.call::<(), ()>(())?;
 
