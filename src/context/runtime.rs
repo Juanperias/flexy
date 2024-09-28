@@ -9,7 +9,7 @@ use mlua::{Lua, Table};
 
 use super::widgets::text;
 
-pub fn run(widgets: &[String]) -> Result<()> {
+pub fn run(widget: String) -> Result<()> {
     init();
 
     let lua = Lua::new();
@@ -40,13 +40,11 @@ pub fn run(widgets: &[String]) -> Result<()> {
     globals.set("error", out_error)?;
     globals.set("clear", ui_clear)?;
 
-    widgets.iter().try_for_each(|widget| {
-        lua.load(widget).exec()?;
+    lua.load(widget).exec()?;
 
-        let widget: mlua::Function = lua.globals().get("widget")?;
+    let widget: mlua::Function = lua.globals().get("widget")?;
 
-        widget.call(())
-    })?;
+    widget.call::<(), ()>(())?;
 
     println!("[{}] Lua loaded correctly", "OUTPUT".yellow());
 

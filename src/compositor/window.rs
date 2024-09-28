@@ -2,7 +2,7 @@ extern crate sdl2;
 
 use crate::models::{compositor_config::Screen, styles::ToColor};
 use colored::Colorize;
-use sdl2::event::{Event, WindowEvent};
+use sdl2::event::Event;
 use std::env;
 use std::time::Duration;
 
