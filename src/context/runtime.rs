@@ -25,12 +25,12 @@ pub fn run(widget: String) -> Result<()> {
     })?;
 
     let out_debug = lua.create_function(|_, message: String| {
-        lua_debug(message);
+        lua_debug(&message);
         Ok(())
     })?;
 
     let out_error = lua.create_function(|_, message: String| {
-        lua_error(message);
+        lua_error(&message);
         Ok(())
     })?;
 

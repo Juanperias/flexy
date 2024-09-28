@@ -33,7 +33,7 @@ pub struct Style {
 
 impl Style {
     pub fn new() -> Self {
-        let font = font_util::get("Arial".to_string()).expect(
+        let font = font_util::get("Arial").expect(
             "Arial font not found try downloading it or specifying an already downloaded font",
         );
 
@@ -45,7 +45,7 @@ impl Style {
             font,
         }
     }
-    pub fn from_table(table: Table) -> Result<Self> {
+    pub fn from_table(table: &Table) -> Result<Self> {
         let color_string: String = table.get("color").unwrap_or("black".into());
         let color_rgb = color_string.to_color()?;
 
@@ -57,9 +57,9 @@ impl Style {
         let font: PathBuf;
 
         if let Some(safe_font_name) = font_name {
-            font = font_util::get(safe_font_name)?;
+            font = font_util::get(&safe_font_name)?;
         } else {
-            font = font_util::get("Arial".to_string()).expect(
+            font = font_util::get("Arial").expect(
                 "Arial font not found try downloading it or specifying an already downloaded font",
             );
         }

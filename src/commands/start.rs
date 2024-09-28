@@ -13,9 +13,9 @@ fn find_screen<'a>(screens: &'a [Screen], name: &str) -> Result<&'a Screen> {
         .ok_or_else(|| anyhow!("screen not found"))
 }
 
-pub fn widget(screen_name: String, can_close: bool) -> Result<()> {
+pub fn widget(screen_name: &str, can_close: bool) -> Result<()> {
     let config = compositor_config()?;
-    let screen = find_screen(&config.screens, &screen_name)?;
+    let screen = find_screen(&config.screens, screen_name)?;
     let lua_code = from_screen(screen)?;
 
     run(lua_code)?;

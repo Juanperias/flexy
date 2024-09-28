@@ -2,7 +2,7 @@ use sdl2::{rect::Rect, render::Canvas, ttf::Sdl2TtfContext, video::Window};
 
 use crate::{context::globals::JOBS, models::job::Kind, widgets::text};
 
-pub fn render_jobs(canvas: &mut Canvas<Window>, ttf: &Sdl2TtfContext) -> Result<(), String> {
+pub fn jobs(canvas: &mut Canvas<Window>, ttf: &Sdl2TtfContext) -> Result<(), String> {
     let jobs_guard = JOBS
         .get()
         .expect("Error: cannot get the jobs")
@@ -14,7 +14,7 @@ pub fn render_jobs(canvas: &mut Canvas<Window>, ttf: &Sdl2TtfContext) -> Result<
     for job in jobs {
         match &job.kind {
             Kind::Text => {
-                let (texture, surface) = text::render(&ttf, job, &texture_creature)?;
+                let (texture, surface) = text::render(ttf, job, &texture_creature)?;
                 canvas.copy(
                     &texture,
                     None,

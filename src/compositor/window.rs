@@ -6,7 +6,7 @@ use sdl2::event::Event;
 use std::env;
 use std::time::Duration;
 
-use super::render::render_jobs;
+use super::render;
 
 pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
     if env::var("WAYLAND_DISPLAY").is_ok() {
@@ -42,17 +42,9 @@ pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
                 Event::Quit { .. } => {
                     if can_close {
                         break 'main;
-                    } else {
-                        println!("[{}] cannot close this window", "ERROR".red())
                     }
+                    println!("[{}] cannot close this window", "ERROR".red());
                 }
-                Event::Window {
-                    timestamp,
-                    window_id,
-                    win_event,
-                } => match win_event {
-                    _ => {}
-                },
                 _ => {}
             }
         }
@@ -65,7 +57,7 @@ pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
         }
 
         canvas.clear();
-        render_jobs(&mut canvas, &ttf_context)?;
+        render::jobs(&mut canvas, &ttf_context)?;
         canvas.present();
 
         std::thread::sleep(Duration::from_millis(100));

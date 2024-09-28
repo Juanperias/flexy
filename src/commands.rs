@@ -21,7 +21,7 @@ impl Commands {
                 channel::get();
             }
             Self::Start { screen, can_close } => {
-                start::widget(screen.to_owned(), can_close.to_owned())?;
+                start::widget(screen, can_close.to_owned())?;
             }
         }
 
