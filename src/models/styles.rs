@@ -46,7 +46,7 @@ impl Style {
         }
     }
     pub fn from_table(table: &Table) -> Result<Self> {
-        let color_string: String = table.get("color").unwrap_or("black".into());
+        let color_string: String = table.get("color").unwrap_or("ffffff".into());
         let color_rgb = color_string.to_color()?;
 
         let font_size: u16 = table.get("font_size").unwrap_or(10);
