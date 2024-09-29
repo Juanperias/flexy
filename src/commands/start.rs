@@ -18,9 +18,9 @@ pub fn widget(screen_name: &str, can_close: bool) -> Result<()> {
     let screen = find_screen(&config.screens, screen_name)?;
     let lua_code = from_screen(screen)?;
 
-    run(lua_code)?;
+    let lua = run(lua_code)?;
 
-    render(screen, can_close).expect("Error: cannot render the windows");
+    render(screen, can_close, lua.get_lua()).expect("Error: cannot render the windows");
 
     Ok(())
 }

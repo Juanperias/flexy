@@ -2,13 +2,14 @@ extern crate sdl2;
 
 use crate::models::{compositor_config::Screen, styles::ToColor};
 use colored::Colorize;
-use sdl2::event::Event;
+use mlua::{Function, Lua};
+use sdl2::event::{Event, WindowEvent};
 use std::env;
 use std::time::Duration;
 
 use super::render;
 
-pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
+pub fn render(screen: &Screen, can_close: bool, lua: &Lua) -> Result<(), String> {
     if env::var("WAYLAND_DISPLAY").is_ok() {
         env::set_var("SDL_VIDEODRIVER", "wayland");
         println!("[{}] video driver set to wayland", "DEBUG".blue());
@@ -45,6 +46,23 @@ pub fn render(screen: &Screen, can_close: bool) -> Result<(), String> {
                     }
                     println!("[{}] cannot close this window", "ERROR".red());
                 }
+                Event::Window {
+                    timestamp: _,
+                    window_id: _,
+                    win_event,
+                } => match win_event {
+                    WindowEvent::Enter {} => {
+                        let on_enter: Function = match lua.globals().get("On_enter") {
+                            Ok(func) => func,
+                            Err(_) => lua
+                                .create_function(|_, ()| Ok(()))
+                                .map_err(|e| e.to_string())?,
+                        };
+
+                        on_enter.call::<(), ()>(()).map_err(|err| err.to_string())?;
+                    }
+                    _ => {}
+                },
                 _ => {}
             }
         }
