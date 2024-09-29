@@ -52,7 +52,7 @@ pub fn render(screen: &Screen, can_close: bool, lua: &Lua) -> Result<(), String>
                     win_event,
                 } => match win_event {
                     WindowEvent::Enter {} => {
-                        let on_enter: Function = match lua.globals().get("On_enter") {
+                        let on_enter: Function = match lua.globals().get("OnEnter") {
                             Ok(func) => func,
                             Err(_) => lua
                                 .create_function(|_, ()| Ok(()))
@@ -75,6 +75,13 @@ pub fn render(screen: &Screen, can_close: bool, lua: &Lua) -> Result<(), String>
         }
 
         canvas.clear();
+        let update: Function = match lua.globals().get("Update") {
+            Ok(func) => func,
+            Err(_) => lua
+                .create_function(|_, ()| Ok(()))
+                .map_err(|e| e.to_string())?,
+        };
+        update.call::<(), ()>(()).map_err(|err| err.to_string())?;
         render::jobs(&mut canvas, &ttf_context)?;
         canvas.present();
 
