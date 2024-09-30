@@ -12,7 +12,5 @@ use cli::get;
 
 fn main() -> Result<()> {
     let cli = get();
-    cli.commands.run()?;
-
-    Ok(())
+    cli.commands.run()
 }
