@@ -1,7 +1,9 @@
-use crate::context::{
-    globals::init,
-    lua_out::{lua_debug, lua_error},
-    widgets::clear,
+use crate::{
+    context::{
+        lua_out::{lua_debug, lua_error},
+        widgets::clear,
+    },
+    models::job::Job,
 };
 use anyhow::Result;
 use colored::Colorize;
@@ -9,24 +11,34 @@ use mlua::{Lua, Table};
 
 use super::widgets::text;
 
+use std::cell::RefCell;
+use std::rc::Rc;
+
 pub struct LuaRuntime {
     lua: Lua,
+    jobs: Rc<RefCell<Vec<Job>>>, // Replacement of the global variable JOBS
 }
 
 impl LuaRuntime {
     pub fn new(widget: String) -> Result<Self> {
-        init();
+        let jobs = Rc::new(RefCell::new(Vec::new()));
 
         let lua = Lua::new();
 
         {
-            let ui_text = lua.create_function(|_, (param, table): (String, Option<Table>)| {
-                text(param, table);
-                Ok(())
-            })?;
+            let jobs_clone = Rc::clone(&jobs);
+            let ui_text =
+                lua.create_function(move |_, (param, table): (String, Option<Table>)| {
+                    let mut jobs = jobs_clone.borrow_mut();
+                    text(param, table, &mut jobs);
+                    Ok(())
+                })?;
 
-            let ui_clear = lua.create_function(|_, ()| {
-                clear();
+            let jobs_clone = Rc::clone(&jobs);
+            let ui_clear = lua.create_function(move |_, ()| {
+                let mut jobs = jobs_clone.borrow_mut();
+                clear(&mut jobs);
+
                 Ok(())
             })?;
 
@@ -54,11 +66,15 @@ impl LuaRuntime {
 
         println!("[{}] Lua loaded correctly", "OUTPUT".yellow());
 
-        Ok(Self { lua })
+        Ok(Self { lua, jobs })
     }
 
     pub fn get_lua(&self) -> &Lua {
         &self.lua
+    }
+
+    pub fn get_jobs(&self) -> Vec<Job> {
+        self.jobs.borrow().to_vec()
     }
 }
 

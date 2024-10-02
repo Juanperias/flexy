@@ -1,11 +1,11 @@
 use crate::models::styles::Style;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Kind {
     Text,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Job {
     pub kind: Kind,
     pub value: String,

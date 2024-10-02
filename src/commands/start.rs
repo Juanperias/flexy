@@ -20,7 +20,8 @@ pub fn widget(screen_name: &str, can_close: bool) -> Result<()> {
 
     let lua = run(lua_code)?;
 
-    render(screen, can_close, lua.get_lua()).expect("Error: cannot render the windows");
+    render(screen, can_close, lua.get_lua(), lua.get_jobs())
+        .expect("Error: cannot render the windows");
 
     Ok(())
 }

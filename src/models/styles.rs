@@ -22,7 +22,7 @@ impl ToColor for String {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Style {
     pub color: Color,
     pub font_size: u16,

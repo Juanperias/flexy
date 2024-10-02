@@ -1,6 +1,6 @@
 extern crate sdl2;
 
-use crate::models::{compositor_config::Screen, styles::ToColor};
+use crate::models::{compositor_config::Screen, job::Job, styles::ToColor};
 use colored::Colorize;
 use mlua::{Function, Lua};
 use sdl2::event::{Event, WindowEvent};
@@ -9,9 +9,9 @@ use std::time::Duration;
 
 use sdl2::{mouse::MouseButton, rect::Rect};
 
-use super::render::jobs;
+use super::render::jobs as render_jobs;
 
-pub fn render(screen: &Screen, can_close: bool, lua: &Lua) -> Result<(), String> {
+pub fn render(screen: &Screen, can_close: bool, lua: &Lua, jobs: Vec<Job>) -> Result<(), String> {
     if env::var("WAYLAND_DISPLAY").is_ok() {
         env::set_var("SDL_VIDEODRIVER", "wayland");
         println!("[{}] video driver set to wayland", "DEBUG".blue());
@@ -98,7 +98,7 @@ pub fn render(screen: &Screen, can_close: bool, lua: &Lua) -> Result<(), String>
                 .map_err(|e| e.to_string())?,
         };
         update.call::<(), ()>(()).map_err(|err| err.to_string())?;
-        job_rects = jobs(&mut canvas, &ttf_context)?;
+        job_rects = render_jobs(&mut canvas, &ttf_context, &jobs)?;
         canvas.present();
         std::thread::sleep(Duration::from_millis(100));
     }
